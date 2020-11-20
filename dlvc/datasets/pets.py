@@ -76,10 +76,6 @@ class PetsDataset(ClassificationDataset):
         # reshape the images
         data_dict[b'data'] = data_dict[b'data'].reshape((len(data_dict[b"data"]), 3, 32, 32))
         data_dict[b'data'] = data_dict[b'data'].transpose(0, 2,3,1)
-
-        # From RGB to BGR
-        data_dict[b'data'] = data_dict[b'data'][..., [2,1,0]]
-
         
         return {
                 "labels": data_dict[b"labels"], 
