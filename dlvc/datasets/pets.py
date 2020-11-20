@@ -80,16 +80,6 @@ class PetsDataset(ClassificationDataset):
         # From RGB to BGR
         data_dict[b'data'] = data_dict[b'data'][..., [2,1,0]]
 
-        # keep only cats and dogs
-        ## cat_label = 3, dog_label = 5
-        idx_to_remove = np.where((np.array(data_dict[b"labels"]) != 3) & (np.array(data_dict[b"labels"]) != 5))[0]
-        for key in data_dict.keys():
-            data_dict[key] = np.delete(data_dict[key], idx_to_remove, axis=0)
-                
-        # rename labels
-        ## cat_label = 0, dog_label = 1
-        data_dict[b"labels"] = np.where(data_dict[b"labels"] == 3, 0, 1)
-
         
         return {
                 "labels": data_dict[b"labels"], 
