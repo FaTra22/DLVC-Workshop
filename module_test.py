@@ -16,7 +16,7 @@ import dlvc.ops as ops
 
 np.random.seed(0)
 
-pets_train = PetsDataset("../cifar-10-batches-py/", Subset.TRAINING)
+pets_train = PetsDataset("./cifar-10-batches-py/", Subset.TRAINING)
 
 op = ops.chain([
     ops.type_cast(np.float32),
