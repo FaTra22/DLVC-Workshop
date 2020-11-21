@@ -1,5 +1,5 @@
 import numpy as np
-
+import scipy.ndimage
 from typing import List, Callable
 
 # All operations are functions that take and return numpy arrays
@@ -122,7 +122,7 @@ def add_noise() -> Op:
 
     def op(sample: np.ndarray) -> np.ndarray:
         if np.random.rand() < 0.5:
-            noise = np.random.normal(0, 0.05, sample.shape)
+            noise = np.random.normal(0, 0.005, sample.shape)
             overflow_upper = sample+noise >= 1
             overflow_lower = sample+noise < 0
             noise[overflow_upper] = 1.0
@@ -131,5 +131,22 @@ def add_noise() -> Op:
             return noisy.astype(np.float32)
         else:
             return sample
+
+    return op
+
+
+def rotate_image() -> Op:
+    '''
+    Rotate image 
+    
+    '''
+
+    def op(sample: np.ndarray) -> np.ndarray:
+        print(sample.shape)
+        angle = np.random.normal(0, 5)
+        image = scipy.ndimage.rotate(sample, angle, reshape=False, axes=(0,1))
+        print(image.shape)
+        return image.astype(np.float32)
+
 
     return op

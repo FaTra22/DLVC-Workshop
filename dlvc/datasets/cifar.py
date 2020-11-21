@@ -3,7 +3,7 @@
 from ..dataset import Sample, Subset, ClassificationDataset
 import numpy as np
 
-class PetsDataset(ClassificationDataset):
+class Cifar10(ClassificationDataset):
     '''
     Dataset of cat and dog images from CIFAR-10 (class 0: cat, class 1: dog).
     '''
