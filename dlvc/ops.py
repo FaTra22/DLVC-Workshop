@@ -142,10 +142,8 @@ def rotate_image() -> Op:
     '''
 
     def op(sample: np.ndarray) -> np.ndarray:
-        print(sample.shape)
         angle = np.random.normal(0, 5)
         image = scipy.ndimage.rotate(sample, angle, reshape=False, axes=(0,1))
-        print(image.shape)
         return image.astype(np.float32)
 
 
