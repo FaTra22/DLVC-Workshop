@@ -1,12 +1,11 @@
 import numpy as np
 import cv2
 
-import torch
-import torch.nn as nn
+import time
 
 
-from dlvc.datasets.pets import PetsDataset
-from dlvc.models.pytorch import CnnClassifier
+from dlvc.datasets.cifar import Cifar10
+
 
 from dlvc.batches import BatchGenerator
 from dlvc.test import Accuracy
@@ -16,15 +15,23 @@ import dlvc.ops as ops
 
 np.random.seed(0)
 
-pets_train = PetsDataset("./cifar-10-batches-py/", Subset.TRAINING)
+pets_train = Cifar10("./cifar-10-batches-py/", Subset.TRAINING)
+
+op_augmented = ops.chain([
+    ops.type_cast(np.float32),
+    ops.add(-127.5),
+    ops.mul(1 / 127.5),
+    ops.hflip(),
+    ops.rcrop(32, 4, 'edge'),
+    ops.add_noise(),
+    ops.rotate_image(),
+    ops.hwc2chw()
+])
 
 op = ops.chain([
     ops.type_cast(np.float32),
     ops.add(-127.5),
     ops.mul(1 / 127.5),
-    ops.hflip(),
-    ops.rcrop(32, 4, 'constant'),
-    ops.add_noise(),
     ops.hwc2chw()
 ])
 
@@ -35,12 +42,20 @@ reverse_op = ops.chain([
     ops.type_cast(np.uint8),
 ])
 
-train_batches = BatchGenerator(pets_train, 100, False, op)
+train_batches = BatchGenerator(pets_train, 128, True, op_augmented)
 
+start = time.time()
+i = 0
+for batch in train_batches:
+    print(i, end="\r")
+    i += 1
+end = time.time()
 
+print("\n {}".format(end-start))
+
+"""
 class Net(nn.Module):
-    """
-    """
+
     def __init__(self, num_classes):
         super(Net, self).__init__()
 
@@ -106,3 +121,4 @@ cv2.destroyAllWindows() # destroys the window showing image
 cv2.imshow('Test Image', image_1)
 cv2.waitKey(0) # waits until a key is pressed
 cv2.destroyAllWindows() # destroys the window showing image
+"""
