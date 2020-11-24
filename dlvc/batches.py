@@ -6,7 +6,7 @@ import typing
 import math
 import random
 import numpy as np
-from prefetch_generator import background
+
 
 class Batch:
     '''
@@ -73,7 +73,6 @@ class BatchGenerator:
             label.append(item.label)
         return Batch(np.array(data), np.array(label), idx)
 
-    @background(max_prefetch=100)
     def __iter__(self) -> typing.Iterable[Batch]:
         '''
         Iterate over the wrapped dataset, returning the data as batches.
